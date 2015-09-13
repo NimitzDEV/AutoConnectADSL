@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="本版本适用于磊科路由器，并且没有设置登录密码"
+        />
+
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="开始自动连网"
+        />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Powered By NimitzDEV \nhttp://nimitzdev.org"
+        />
+
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/webViewURL" />
+</LinearLayout>
