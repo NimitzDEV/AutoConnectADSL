@@ -17,6 +17,8 @@ import android.telephony.SmsManager;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -24,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
 
     String SENT_SMS_ACTION="SENT_SMS_ACTION";
     String DELIVERED_SMS_ACTION="DELIVERED_SMS_ACTION";
-
+    public TextView tvStatus;
+    public ProgressBar pbStatus;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         init();
 
+        //TEXTVIEW STATUS
+         tvStatus = (TextView)findViewById(R.id.tvStatus);
+        pbStatus = (ProgressBar)findViewById(R.id.progressBar);
         Button btn = (Button) findViewById(R.id.btn);
         btn.setOnClickListener(new View.OnClickListener() {
 
@@ -43,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
                 Button btn = (Button) findViewById(R.id.btn);
                 btn.setEnabled(false);
                 btn.setText("正在执行操作...");
+                pbStatus.setVisibility(View.VISIBLE);
+                pbStatus.setProgress(20);
+                tvStatus.setText("正在发送短信...");
                 sendSMS(telNo, content);
             }
         });
@@ -58,8 +67,11 @@ public class MainActivity extends AppCompatActivity {
             public void OnReceived(String message) {
                 mWebView.loadUrl(message);
                 Button btn = (Button)findViewById(R.id.btn);
-                btn.setEnabled(false);
-                btn.setText("操作已经完成，可以退出");
+                btn.setEnabled(true);
+                tvStatus.setText("已经设置路由器，稍后即可上网");
+                btn.setText("开始自动连网");
+                pbStatus.setProgress(0);
+                pbStatus.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -111,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             sms.sendTextMessage(phoneNumber, null, message, sentPI, deliverPI);
         }
+        tvStatus.setText("正在获取上网密码");
         Toast.makeText(MainActivity.this, "正在获取上网密码...", Toast.LENGTH_LONG).show();
 
         //register the Broadcast Receivers
@@ -123,6 +136,8 @@ public class MainActivity extends AppCompatActivity {
                                          Toast.makeText(getBaseContext(),
                                                  "密码获取短信成功发送,稍后将自动链接网络",
                                                  Toast.LENGTH_SHORT).show();
+                                         tvStatus.setText("正在等待密码...");
+                                         pbStatus.setProgress(60);
                                          break;
                                      case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
                                          Toast.makeText(getBaseContext(),
