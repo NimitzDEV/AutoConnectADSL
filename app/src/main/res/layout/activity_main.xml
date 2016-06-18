@@ -1,56 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:weightSum="1">
 
-    <TextView
+    <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="本版本适用于磊科路由器\n并且没有设置登录密码"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp" />
+        android:id="@+id/scrollView" >
 
-    <Button
-        android:id="@+id/btn"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="开始自动连网"
-        android:layout_weight="0.12"
-        android:layout_margin="10dp" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-        android:text="准备就绪"
-        android:id="@+id/tvStatus"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp" />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="本版本适用于安装了OpenWRT固件的路由器，并且对应放置了CGI程序"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/abc_background_cache_hint_selector_material_dark"
+                android:textSize="20sp" />
 
-    <ProgressBar
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:visibility="invisible"
-        android:progress="0"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_margin="10dp"
-        android:layout_marginTop="10dp" />
+            <Button
+                android:id="@+id/btn"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="开始自动连网"
+                android:layout_weight="0"
+                android:layout_margin="10dp"
+                android:textStyle="bold"
+                android:textSize="20sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Powered By NimitzDEV \nhttps://isnimitz.com"
-        android:layout_marginLeft="10dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                android:text="准备就绪"
+                android:id="@+id/tvStatus"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp" />
 
-    <WebView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:id="@+id/webViewURL"
-        android:visibility="invisible" />
+            <ProgressBar
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/progressBar"
+                android:visibility="invisible"
+                android:progress="0"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_margin="10dp"
+                android:layout_marginTop="10dp" />
 
-</LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Powered By NimitzDEV \nhttps://isnimitz.com"
+                android:layout_marginLeft="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="设置选项 - PPPoE 账号"
+                android:id="@+id/textView"
+                android:layout_margin="10dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtPPPOEUserName"
+                android:layout_margin="10dp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="保存设置"
+                android:id="@+id/btnSaveSettings"
+                android:layout_gravity="right"
+                android:layout_margin="10dp" />
+
+            <WebView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:id="@+id/webViewURL"
+                android:visibility="invisible"
+                android:layout_margin="10dp" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

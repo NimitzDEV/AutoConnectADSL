@@ -1,12 +1,15 @@
 package org.nimitzdev.netcorerouterpost;
 
 //DEFAULT
+
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 //EXTENDS
 import java.util.List;
+
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -16,19 +19,25 @@ import android.content.IntentFilter;
 import android.telephony.SmsManager;
 import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 public class MainActivity extends AppCompatActivity {
 
-    String SENT_SMS_ACTION="SENT_SMS_ACTION";
-    String DELIVERED_SMS_ACTION="DELIVERED_SMS_ACTION";
+    String SENT_SMS_ACTION = "SENT_SMS_ACTION";
+    String DELIVERED_SMS_ACTION = "DELIVERED_SMS_ACTION";
     public TextView tvStatus;
     public ProgressBar pbStatus;
-    /** Called when the activity is first created. */
+    public static final String PREFS_NAME = "saved";
+    public String pppoeUserName;
+
+    /**
+     * Called when the activity is first created.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
         init();
 
         //TEXTVIEW STATUS
-         tvStatus = (TextView)findViewById(R.id.tvStatus);
-        pbStatus = (ProgressBar)findViewById(R.id.progressBar);
+        tvStatus = (TextView) findViewById(R.id.tvStatus);
+        pbStatus = (ProgressBar) findViewById(R.id.progressBar);
         Button btn = (Button) findViewById(R.id.btn);
         btn.setOnClickListener(new View.OnClickListener() {
 
@@ -55,20 +64,47 @@ public class MainActivity extends AppCompatActivity {
                 sendSMS(telNo, content);
             }
         });
+        btn.setFocusable(true);
+        btn.setFocusableInTouchMode(true);
+        btn.requestFocus();
+        btn.setText("开始自动连网");
+
+        final Button btnSave = (Button) findViewById(R.id.btnSaveSettings);
+        final EditText txtUserName = (EditText) findViewById(R.id.txtPPPOEUserName);
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        pppoeUserName = settings.getString("pppoe_user_name", "10010");
+        txtUserName.setText(pppoeUserName);
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences.Editor editor = settings.edit();
+                pppoeUserName = txtUserName.getText().toString();
+                editor.putString("pppoe_user_name", pppoeUserName);
+                editor.commit();
+                btnSave.setText("保存完成");
+            }
+        });
     }
 
-    private void init(){
+    private void saveSetting(String setValue) {
+
+    }
+
+    private void init() {
         final WebView mWebView;
-        mWebView=(WebView) findViewById(R.id.webViewURL);
+        mWebView = (WebView) findViewById(R.id.webViewURL);
         ReceiverDemo mMessageListener;
         mMessageListener = new ReceiverDemo();
         mMessageListener.setOnReceivedMessageListener(new ReceiverDemo.MessageListener() {
             @Override
             public void OnReceived(String message) {
-                mWebView.loadUrl(message);
-                Button btn = (Button)findViewById(R.id.btn);
+                String composeUrl = "http://192.168.1.1/cgi-bin/fast?pppoeun=" + pppoeUserName + "&pppoepwd=" + message;
+                mWebView.setWebViewClient(new WebViewClient());
+                mWebView.loadUrl(composeUrl);
+                Button btn = (Button) findViewById(R.id.btn);
                 btn.setEnabled(true);
-                tvStatus.setText("已经设置路由器，稍后即可上网");
+                tvStatus.setText("CGI程序请求完成");
                 btn.setText("开始自动连网");
                 pbStatus.setProgress(0);
                 pbStatus.setVisibility(View.INVISIBLE);
@@ -100,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Send SMS
+     *
      * @param phoneNumber
      * @param message
      */
@@ -127,11 +164,10 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(MainActivity.this, "正在获取上网密码...", Toast.LENGTH_LONG).show();
 
         //register the Broadcast Receivers
-        registerReceiver(new BroadcastReceiver(){
+        registerReceiver(new BroadcastReceiver() {
                              @Override
-                             public void onReceive(Context _context,Intent _intent)
-                             {
-                                 switch(getResultCode()){
+                             public void onReceive(Context _context, Intent _intent) {
+                                 switch (getResultCode()) {
                                      case Activity.RESULT_OK:
                                          Toast.makeText(getBaseContext(),
                                                  "密码获取短信成功发送,稍后将自动链接网络",
@@ -161,10 +197,9 @@ public class MainActivity extends AppCompatActivity {
                              }
                          },
                 new IntentFilter(SENT_SMS_ACTION));
-        registerReceiver(new BroadcastReceiver(){
+        registerReceiver(new BroadcastReceiver() {
                              @Override
-                             public void onReceive(Context _context,Intent _intent)
-                             {
+                             public void onReceive(Context _context, Intent _intent) {
                                  Toast.makeText(getBaseContext(),
                                          "正在等待回应",
                                          Toast.LENGTH_SHORT).show();
@@ -172,7 +207,8 @@ public class MainActivity extends AppCompatActivity {
                          },
                 new IntentFilter(DELIVERED_SMS_ACTION));
     }
-    public void errorRecv(){
+
+    public void errorRecv() {
         pbStatus.setVisibility(View.INVISIBLE);
         tvStatus.setText("可能手机欠费");
     }
