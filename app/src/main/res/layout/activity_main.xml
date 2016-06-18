@@ -5,12 +5,6 @@
     android:layout_height="fill_parent"
     android:weightSum="1">
 
-    <WebView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:id="@+id/webViewURL"
-        android:visibility="invisible" />
-
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -52,5 +46,11 @@
         android:layout_height="wrap_content"
         android:text="Powered By NimitzDEV \nhttps://isnimitz.com"
         android:layout_marginLeft="10dp" />
+
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/webViewURL"
+        android:visibility="invisible" />
 
 </LinearLayout>
