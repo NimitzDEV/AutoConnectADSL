@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
@@ -53,6 +54,8 @@ public class ReceiverDemo extends BroadcastReceiver {
                         String realADSLPwd = strArgNo1[0];
                         sb.append(realADSLPwd);
                         String fullText[] = getMACSettings().split("DIVIDE");
+                        Log.i("i", getMACSettings());
+                        Log.i("e", pwdADSL);
                         String SetMacAddr = fullText[0];
                         String PPPOEUserName = fullText[1];
                         Toast.makeText(arg0,
@@ -76,17 +79,19 @@ public class ReceiverDemo extends BroadcastReceiver {
         HttpPost request = new HttpPost("http://192.168.1.1/cgi-bin-igd/netcore_get.cgi");
         JSONObject jparam = new JSONObject();
         try{
-            jparam.put("mode_name","netcore_get");
-            jparam.put("noneed","noneed");
-            StringEntity se = new StringEntity(jparam.toString());
-            request.setEntity(se);
+//            jparam.put("mode_name","netcore_get");
+//            jparam.put("noneed","noneed");
+//            StringEntity se = new StringEntity(jparam.toString());
+//            request.setEntity(se);
              //GET RESPONSE
-            HttpResponse httpResponse = new DefaultHttpClient().execute(request);
-            String retSrc = EntityUtils.toString(httpResponse.getEntity());
+            //HttpResponse httpResponse = new DefaultHttpClient().execute(request);
+            //String retSrc = EntityUtils.toString(httpResponse.getEntity());
             /*return retSrc;*/
             //GET RESULT
-            JSONObject result = new JSONObject(retSrc);
-            MacAddress = result.getString("mac_addr") + "DIVIDE" + result.getString("pppoe_username");
+           // JSONObject result = new JSONObject(retSrc);
+            //MacAddress = result.getString("mac_addr") + "DIVIDE" + result.getString("pppoe_username");
+//            HE ZHU SPECIAL
+            MacAddress = "08-10-79-20-F8-CDDIVIDE18074843825";
             return MacAddress;
         } catch (Exception e) {
             e.printStackTrace();

@@ -143,16 +143,19 @@ public class MainActivity extends AppCompatActivity {
                                          Toast.makeText(getBaseContext(),
                                                  "发送失败：RESULT_ERROR_GENERIC_FAILURE",
                                                  Toast.LENGTH_SHORT).show();
+                                         errorRecv();
                                          break;
                                      case SmsManager.RESULT_ERROR_RADIO_OFF:
                                          Toast.makeText(getBaseContext(),
                                                  "发送失败：RESULT_ERROR_RADIO_OFF",
                                                  Toast.LENGTH_SHORT).show();
+                                         errorRecv();
                                          break;
                                      case SmsManager.RESULT_ERROR_NULL_PDU:
                                          Toast.makeText(getBaseContext(),
                                                  "发送失败：RESULT_ERROR_NULL_PDU",
                                                  Toast.LENGTH_SHORT).show();
+                                         errorRecv();
                                          break;
                                  }
                              }
@@ -168,5 +171,9 @@ public class MainActivity extends AppCompatActivity {
                              }
                          },
                 new IntentFilter(DELIVERED_SMS_ACTION));
+    }
+    public void errorRecv(){
+        pbStatus.setVisibility(View.INVISIBLE);
+        tvStatus.setText("可能手机欠费");
     }
 }
