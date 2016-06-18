@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NetCoreRouterPOST</string>
+    <string name="app_name">自动PPPoE联网 - 磊科版</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
